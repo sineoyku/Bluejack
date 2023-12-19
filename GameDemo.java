@@ -17,8 +17,7 @@ public class GameDemo{
       tempcolor = k.getCardcolor(z);
       k.setCardcolor(z, k.getCardcolor(y));
       k.setCardcolor(y, tempcolor);
-
-
+      
       tempnum = k.getCardnum(z);
       k.setCardnum(z, k.getCardnum(y));
       k.setCardnum(y, tempnum);
@@ -79,7 +78,7 @@ public class GameDemo{
 	if(sign == 0)  computer.setPlNum(i+5, temp);
 	else computer.setPlNum(i+5, (-1)*temp);
    }
-    chance = rd.nextInt(10);
+    chance = rd.nextInt(10) + 1;
     if(chance<=8){
       for(int i = 0; i<2; i++){
         temp = rd.nextInt(40);
@@ -110,8 +109,8 @@ public class GameDemo{
       System.out.println(x.getCardcolor(i) + x.getCardnum(i)); 
       } 
       
-   PlayerDeck player = new PlayerDeck();
-   PlayerDeck computer = new PlayerDeck();
+   PlayerDeck player = new PlayerDeck(10);
+   PlayerDeck computer = new PlayerDeck(10);
    Deal(player, computer, x);
 
     //test player decks
@@ -123,6 +122,34 @@ public class GameDemo{
    for(int i = 0; i<10; i++){
      System.out.println(computer.getPlColor(i) +" "+ computer.getPlNum(i));
    }
+   
+   PlayerDeck plhand = new PlayerDeck(4);
+   PlayerDeck cpuhand = new PlayerDeck(4);
+
+  
+   int i = 0;
+   int num;
+   while(i<4){
+      num = rd.nextInt(10);
+      plhand.setPlNum(i, num);
+      plhand.setPlColor(i, player.getPlColor(num));
+      i++;
+      if(i==4) break;
+
+   }
+    while(i<4){
+      num = rd.nextInt(10);
+      cpuhand.setPlNum(i, num);
+      cpuhand.setPlColor(i, computer.getPlColor(num));
+      i++;
+      if(i==4) break;
+   }
+  
+   // testing the player hands
+   for(int j = 0; j<4; j++){
+     System.out.println(plhand.getPlNum(j) +" "+plhand.getPlColor(j));
+   }
+
 
 
     
