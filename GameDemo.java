@@ -152,110 +152,98 @@ public class GameDemo{
    }
    */
    
-   //Starting the actual game
-   Scanner sc = new Scanner(System.in);
-   int[] playerboard = new int[9];
-   int[] cpuboard = new int[9];
-   int card ;
-   String choice ;
-   int playersum = 0;
-   int cpusum = 0;
-   int playerscore =0;
-   int cpuscore = 0;
-   int turn = 1;;
-   boolean game = true;
-   while(game){
-  
-   card = rd.nextInt(30) + 5;
-   playerboard[turn-1] = card; 
-   
-   System.out.print("Your board: ");
-    for(i=0;i<(turn); i++){
-       System.out.print(x.getCardcolor(playerboard[i]) + " ");
-       System.out.print(x.getCardnum(playerboard[i]) + "-");
-       
-   }
-   System.out.println("\nEnd or Stand?");
-   choice = sc.nextLine();
-   if(choice.equals("End")){
-       System.out.println("You chose to end your turn, computer's turn!");	   
-       card = rd.nextInt(30) + 5;
 
-       //checking if this card has been drawn before
-       for(int j= 0; j<playerboard.length; j++){
-          if(card == playerboard[j] || card == cpuboard[j]) card = rd.nextInt(30) + 5;
-          else continue;	  
-       }
+  //starting the actual game 
+  int[] playerboard = new int[9];
+  int[] cpuboard = new int[9];
 
-       cpuboard[turn-1] = card;
-       System.out.print("Computer board: ");
+  int drawncard;
+  int turn = 0;
+  boolean plturn=true; //player starts the game
+  boolean cputurn=false;  //since the cpu deals it
+  String out = "";
 
-       for(i= 0; i<(turn); i++){
-          System.out.print(x.getCardcolor(cpuboard[i]) + " ");
-	  System.out.print(x.getCardnum(cpuboard[i]) + "-");
-       }
-       int chance = rd.nextInt(2);
-       if(chance == 0) {
-	       System.out.println("\nYour turn!");
-                
-       }
-       else {
-	       System.out.println("\nComputer chose to stand. Your turn!");
-             
-       }
-   }
-   else{
-    	   int w = 1;	
-       while(true){	      
-       System.out.println("You chose to stand, computer's turn!");	   
-       for(i= 0; i<w; i++){	   
-       card = rd.nextInt(30) + 5;
-
-       //checking if this card has been drawn before
-       for(int j= 0; j<playerboard.length; j++){
-          if(card == playerboard[j] || card == cpuboard[j]) card = rd.nextInt(30) + 5;
-          else continue;	  
-       }
-
-       cpuboard[turn-1] = card;
-       System.out.print("Computer board: ");
-
-       for(int q = 0; q<i; q++){
-          System.out.print(x.getCardcolor(cpuboard[i]) + " ");
-	  System.out.print(x.getCardnum(cpuboard[i]) + "-");
-       }
-       for(i = 0; i<turn; i++){
-       cpusum += x.getCardnum(cpuboard[i]);
-       }
-       if(cpusum>= 20 || (cpusum+=5)==20){ // both of the players chose to stand, end of this turn
-          System.out.println("Computer chose to stand.");
-          for(i = 0; i<turn; i++){
-             playersum += x.getCardnum(playerboard[i]);
-         }
-	 System.out.println("Your score: " +playersum+ "Computer's Score: " +cpusum);
-	 if(playersum>cpusum){
-		 System.out.println("You won this turn!");
-	         playerscore++;
-			 }
-	 if(cpusum>playersum){
-		 System.out.println("Computer won this turn!");
-	         cpuscore++;
-		 	 }
-	 else {
-		 System.out.println("Tie!");
-	         playerscore++;
-		 cpuscore++;
-
-	 }
-	 break;
-       }
-       else w++;
-              
-    }   
-    }
-   }   
+  for(i= 0; i<9; i++){
+     playerboard[i]=-1;
+     cpuboard[i]=-1;
   }
 
+  while(true){
+	 try{
+	     for(i=0; i<9; i++){
+	       out += x.getCardcolor(playerboard[i]) +" ";
+	       out += String.valueOf(x.getCardnum(playerboard[i])) + "-";
+    	     }
+	     System.out.print("Your Board: ");
+	     System.out.print(out.substring(0, out.length() -1));
+	  }
+	  catch(Exception e){
+	     System.out.println("Game over");
+	  }
+	  finally{
+	    if(playerboard[0]==-1) System.out.println("Starting game");
+	  }
+     while(plturn){	  
+	     
+          drawncard = rd.nextInt(30)+5;
+          playerboard[turn]=drawncard;
+   
+          for(i=0;i<(turn+1);i++){ //checking if this card has been drawn before
+             if(playerboard[i]==playerboard[turn] || cpuboard[i]==playerboard[turn]){
+	       drawncard = rd.nextInt(30)+5;
+                 playerboard[turn]=drawncard;
+       	    }    
+          }
+	  for(int j=0; j<turn+1; j++){
+	       out += x.getCardcolor(playerboard[j]) +" ";
+	       out += String.valueOf(x.getCardnum(playerboard[j])) + "-";
+          }
+	  System.out.print("Your Board: ");
+	  System.out.print(out.substring(0, out.length() -1));
+	  try{
+	  for(int j=0; j<turn+1; j++){
+	       out += x.getCardcolor(cpuboard[j]) +" ";
+	       out += String.valueOf(x.getCardnum(cpuboard[j])) +"-";
+    	  }
+	  System.out.print("Computer Board: ");
+	  System.out.print(out.substring(0, out.length() -1));
+	  }
+	  catch(Exception e){
+	    System.out.println("Computer Board: -");
+	  }
+	  finally{
+	    out="";
+	  }
+     plturn=false;
+     cputurn=true;
+    }
+    while(cputurn){
+          drawncard = rd.nextInt(30)+5;
+          cpuboard[turn]=drawncard;
+   
+          for(i=0;i<(turn);i++){ //checking if this card has been drawn before
+             if(playerboard[i]==playerboard[turn] || cpuboard[i]==playerboard[turn]){
+	       drawncard = rd.nextInt(30)+5;
+                 cpuboard[turn]=drawncard;
+       	     }    
+          }
+	  for(i=0; i<turn+1; i++){
+	       out += x.getCardcolor(playerboard[i]) + " ";
+	       out += String.valueOf(x.getCardnum(playerboard[i])) + "-";
+          }
+	  System.out.print("Your Board: ");
+	  System.out.print(out.substring(0, out.length() -1));
+	  for(i=0; i<turn+1; i++){
+	       out += x.getCardcolor(cpuboard[i]) + " ";
+	       out += String.valueOf(x.getCardnum(cpuboard[i])) + "-";
+    	  }
+	  System.out.print("Computer Board: ");
+	  System.out.print(out.substring(0, out.length() -1));
+          cputurn=false;
+          plturn=true;	  
+
+   }
+  }
 
    
 
