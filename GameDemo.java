@@ -368,19 +368,36 @@ public class GameDemo{
           }
        
       if(turn==9){ //Round over
-	  if(sumpl>sumcpu){ 
+	 if(sumpl<=20&& sumcpu<=20){ 
+	      if(sumpl>sumcpu){
 		  System.out.println("         You won this round!");
-	          plscore++;
-	  }
-	  else if(sumpl<sumcpu){
+	          plscore++;  
+	          break;   }
+	      else if(sumpl<sumcpu){
 		  System.out.println("         Computer won this round!");
 	          cpuscore++;
+                  break;   }
+	       else{ 
+		  System.out.println("         Tie!");
+	          cpuscore++;
+	          plscore++;
+                  break; }
 	  }
-	  else{ 
-	        System.out.println("         Tie!");
-	        cpuscore++;
-		plscore++;
-	  }
+
+	  else if(sumpl<20 && sumcpu>20){
+	     System.out.println("         You won this round!");
+	     plscore++;
+	     break;  }
+	  else if(sumpl>20 && sumcpu<20){
+	     System.out.println("         Computer won this round!");
+	     cpuscore++;		  
+	     break; }
+	  else if(sumcpu>20 && sumpl>20){
+              System.out.println("         No one wins :c ");
+	      break; 	  }
+
+
+
       }
       }
 
@@ -436,29 +453,38 @@ public class GameDemo{
 		  System.out.println("YOUR SCORE: " +sumpl);  
 
 
-		  if(sumpl>sumcpu){ 
-		 	 System.out.println("         You won this round!");
-	         	 plscore++;
-		         turncpu++;	
-			 break;
-		  }
-		  else if(sumpl<sumcpu){
-			  System.out.println("         Computer won this round!");
-	        	  cpuscore++;
-			  turncpu++;	
-			  break;
-		  }
-		  else{ 
-	      		System.out.println("         Tie!");
-	     	        cpuscore++;
-	               	plscore++;
-		        turncpu++;	
-			break;
-	 	  }     
+	 if(sumpl<=20&& sumcpu<=20){ 
+	      if(sumpl>sumcpu){
+		  System.out.println("         You won this round!");
+	          plscore++;  
+	          break;   }
+	      else if(sumpl<sumcpu){
+		  System.out.println("         Computer won this round!");
+	          cpuscore++;
+                  break;   }
+	       else{ 
+		  System.out.println("         Tie!");
+	          cpuscore++;
+	          plscore++;
+                  break; }
+	  }
+
+	  else if(sumpl<20 && sumcpu>20){
+	     System.out.println("         You won this round!");
+	     plscore++;
+	     break;  }
+	  else if(sumpl>20 && sumcpu<20){
+	     System.out.println("         Computer won this round!");
+	     cpuscore++;		  
+	     break; }
+	  else if(sumcpu>20 && sumpl>20){
+              System.out.println("         No one wins :c ");
+	      break; 	  }
+    
 	  }
 
           else{
-	  if(sumcpu>15){
+	  if(sumcpu>15 && sumcpu<21){
 		  System.out.println("                    Computer chose to stand!");
        		  System.out.print("COMPUTER'S BOARD: ");
       		  System.out.println(outcpu.substring(0, outcpu.length()-2));
@@ -467,25 +493,33 @@ public class GameDemo{
        		  System.out.println(outpl.substring(0, outpl.length()-2));
 		  System.out.println("YOUR SCORE: " +sumpl); 
 	
-		  if(sumpl>sumcpu){ 
-		 	 System.out.println("         You won this round!");
-	         	 plscore++;
-	                 turncpu++;			 
-			 break;
-		  }
-		  else if(sumpl<sumcpu){
-			  System.out.println("         Computer won this round!");
-	        	  cpuscore++;
-	                  turncpu++;	  
-			  break;
-		  }
-		  else{ 
-	      		System.out.println("         Tie!");
-	     	        cpuscore++;
-	               	plscore++;
-	                turncpu++;	
-			break;
-	 	  }
+	 if(sumpl<=20 && sumcpu<=20){ 
+	      if(sumpl>sumcpu){
+		  System.out.println("         You won this round!");
+	          plscore++;  
+	          break;   }
+	      else if(sumpl<sumcpu){
+		  System.out.println("         Computer won this round!");
+	          cpuscore++;
+                  break;   }
+	       else{ 
+		  System.out.println("         Tie!");
+	          cpuscore++;
+	          plscore++;
+                  break; }
+	  }
+
+	  else if(sumpl<20 && sumcpu>20){
+	     System.out.println("         You won this round!");
+	     plscore++;
+	     break;  }
+	  else if(sumpl>20 && sumcpu<20){
+	     System.out.println("         Computer won this round!");
+	     cpuscore++;		  
+	     break; }
+	  else if(sumcpu>20 && sumpl>20){
+              System.out.println("         No one wins :c ");
+	      break; 	  }
 	 }
 	  }
       }
@@ -563,25 +597,33 @@ public class GameDemo{
       int compare = choice.compareToIgnoreCase("stand");
       if(compare==0){
                   System.out.println("                    You chose to stand. Round over");
-		  if(sumpl>sumcpu){ 
-		 	 System.out.println("         You won this round!");
-	         	 plscore++;
-			 turnpl++;
-			 break;
-		  }
-		  else if(sumpl<sumcpu){
-			  System.out.println("         Computer won this round!");
-	        	  cpuscore++;
-			  turnpl++;
-			  break;
-		  }
-		  else{ 
-	      		System.out.println("         Tie!");
-	     	        cpuscore++;
-	               	plscore++;
-			turnpl++;
-			break;
-         	  }
+	 if(sumpl<=20&& sumcpu<=20){ 
+	      if(sumpl>sumcpu){
+		  System.out.println("         You won this round!");
+	          plscore++;  
+	          break;   }
+	      else if(sumpl<sumcpu){
+		  System.out.println("         Computer won this round!");
+	          cpuscore++;
+                  break;   }
+	       else{ 
+		  System.out.println("         Tie!");
+	          cpuscore++;
+	          plscore++;
+                  break; }
+	  }
+
+	  else if(sumpl<20 && sumcpu>20){
+	     System.out.println("         You won this round!");
+	     plscore++;
+	     break;  }
+	  else if(sumpl>20 && sumcpu<20){
+	     System.out.println("         Computer won this round!");
+	     cpuscore++;		  
+	     break; }
+	  else if(sumcpu>20 && sumpl>20){
+              System.out.println("         No one wins :c ");
+	      break; 	  }
 
  
          }
