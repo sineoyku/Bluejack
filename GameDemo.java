@@ -232,9 +232,9 @@ public class GameDemo{
       if(i==4) break;
    }}
 	  
-    System.out.println("\n                 -ROUND " +round+"-");
+    System.out.println("\n                 -ROUND " +round+ "-");
     System.out.println("************************************************\n");
-    System.out.print("YOUR HAND: ");
+    System.out.print("YOUR HAND: "); 
     for(int j = 0; j<4; j++){
       System.out.print(plhand.getPlNum(j) +" "+plhand.getPlColor(j)+" ");
     }
@@ -258,6 +258,7 @@ public class GameDemo{
 
       System.out.print("YOUR BOARD: ");
       System.out.println(outpl.substring(0, outpl.length()-2));
+      System.out.println("YOUR SCORE: " +sumpl);
 
       System.out.print("                    Use Card: ");
       try{
@@ -276,7 +277,8 @@ public class GameDemo{
 	      outpl+= plhand.getPlColor(lol-1) + " ";
 	      outpl+= plhand.getPlNum(lol-1) + " - ";
               System.out.print("YOUR BOARD: ");
-              System.out.println(outpl.substring(0, outpl.length()-2));  
+              System.out.println(outpl.substring(0, outpl.length()-2)); 
+	      System.out.println("YOUR SCORE: " + sumpl); 
 	      bool = false;
            }
            else if(lol==0) bool = false;
@@ -324,13 +326,11 @@ public class GameDemo{
           cpuboard[turn] = drawncard;
           sumcpu += x.getCardnum(cpuboard[turn]); 
 
-	  for(int q = turn; q<(turn+1); q++){
-             outcpu += x.getCardcolor(cpuboard[q]) + " ";
-     	     outcpu += String.valueOf(x.getCardnum(cpuboard[q])) + " - ";
-          }
-       
+          outcpu += x.getCardcolor(cpuboard[turn]) + " ";
+     	  outcpu += String.valueOf(x.getCardnum(cpuboard[turn])) + " - ";    
           System.out.print("COMPUTER'S BOARD: ");
-          System.out.println(outcpu.substring(0, outcpu.length()-2));	  
+          System.out.println(outcpu.substring(0, outcpu.length()-2));	
+	  System.out.println("COMPUTER'S SCORE: " +sumcpu);  
 
 	  int card = choosecard(sumcpu, cpuboard, turn, x, cpuhand);
 	  if(card>0){
@@ -342,17 +342,17 @@ public class GameDemo{
 	      else if(str.equals("flip")){
 	         sumcpu -= 2*x.getCardnum(cpuboard[turn]);
 	      } 
-	      else sumcpu += cpuhand.getPlNum(card);
+	      else sumcpu += cpuhand.getPlNum(card); 
 
 	      outcpu+= cpuhand.getPlColor(card) + " ";
 	      outcpu+= cpuhand.getPlNum(card) + " - ";
               System.out.print("COMPUTER'S BOARD: ");
               System.out.println(outcpu.substring(0, outcpu.length()-2));
+	      System.out.println("COMPUTER'S SCORE: " +sumcpu);  
 
               cpuhand.setPlColor(card, "null");
-	      cpuhand.setPlNum(card, 0);
-	 
-	  }
+	      cpuhand.setPlNum(card, 0);	 
+	  } 
 	  
 	  
 	  if(sumcpu>15){
@@ -400,6 +400,7 @@ public class GameDemo{
 	  outcpu += String.valueOf(x.getCardnum(drawncard)) + " - ";
               System.out.print("COMPUTER'S BOARD: ");
               System.out.println(outcpu.substring(0, outcpu.length()-2));
+	      System.out.println("COMPUTER'S SCORE: " +sumcpu);  
 
 	  int card = choosecard(sumcpu, cpuboard, turncpu, x, cpuhand);
       	  if(card>0){
@@ -411,12 +412,13 @@ public class GameDemo{
 	      else if(cpuhand.getPlColor(card).equals("flip")){
 	         sumcpu -= 2*x.getCardnum(cpuboard[turncpu]);
 	      }
-	      else sumpl += plhand.getPlNum(card);
+	      else sumcpu += cpuhand.getPlNum(card);
 
 	      outcpu+= cpuhand.getPlColor(card) + " ";
 	      outcpu+= cpuhand.getPlNum(card) + " - ";
               System.out.print("COMPUTER'S BOARD: ");
               System.out.println(outcpu.substring(0, outcpu.length()-2));
+              System.out.println("COMPUTER'S SCORE: " +sumcpu);  
 	 
 	  }
  
@@ -428,14 +430,11 @@ public class GameDemo{
          	  }
        		  System.out.print("COMPUTER'S BOARD: ");
       		  System.out.println(outcpu.substring(0, outcpu.length()-2));
+		  System.out.println("COMPUTER'S SCORE: " +sumcpu);  
       		  System.out.print("YOUR BOARD: ");
        		  System.out.println(outpl.substring(0, outpl.length()-2));
+		  System.out.println("YOUR SCORE: " +sumpl);  
 
-		  for(int w = 0; w<9; w++){
-	            int k = playerboard[w];
-                    if(k>0) sumpl += x.getCardnum(playerboard[w]); 
-		    else sumpl += -1*x.getCardnum(playerboard[w]);  
-	  	  }
 
 		  if(sumpl>sumcpu){ 
 		 	 System.out.println("         You won this round!");
@@ -461,15 +460,12 @@ public class GameDemo{
           else{
 	  if(sumcpu>15){
 		  System.out.println("                    Computer chose to stand!");
-  	          for(int w = turncpu; w<(turncpu+1); w++){
-           	     outcpu += x.getCardcolor(w) + " ";
-     	    	     outcpu += String.valueOf(x.getCardnum(w)) + " - ";
-         	  }
        		  System.out.print("COMPUTER'S BOARD: ");
       		  System.out.println(outcpu.substring(0, outcpu.length()-2));
+		  System.out.println("COMPUTER'S SCORE: " +sumcpu);  
       		  System.out.print("YOUR BOARD: ");
        		  System.out.println(outpl.substring(0, outpl.length()-2));
-
+		  System.out.println("YOUR SCORE: " +sumpl); 
 	
 		  if(sumpl>sumcpu){ 
 		 	 System.out.println("         You won this round!");
@@ -514,6 +510,7 @@ public class GameDemo{
           
           System.out.print("YOUR BOARD: ");
           System.out.println(outpl.substring(0, outpl.length()-1));
+	  System.out.println("YOUR SCORE: " +sumpl); 
 
           System.out.print("                    Use Card: ");
       try{
@@ -534,6 +531,7 @@ public class GameDemo{
 	      outpl+= plhand.getPlNum(lol-1) + " - ";
               System.out.print("YOUR BOARD: ");
               System.out.print(outpl.substring(0, outpl.length()-2));  
+	      System.out.println("YOUR SCORE: " +sumpl); 
 	      bool = false;
            }
            else if(lol==0) bool = false;
@@ -593,9 +591,25 @@ public class GameDemo{
   System.out.println("\n************************************************"); 
   System.out.print("\nYour score: " + plscore);
   System.out.println("       Cpu score: " + cpuscore);
-  
+
+  if(plscore==3){ 
+	  System.out.println("            You won!");
+          break;
+  }
+  else if(cpuscore==3){ 
+	  System.out.println("             Computer won!");
+          break;
+  }
+ 
   outpl = "";
   outcpu = "";
+  turn = 0;
+  turncpu = 0;
+  turnpl = 0;
+  sumcpu = 0;
+  sumpl = 0;
+  loop3 = false;
+  loop2 = false;
   }
 
     
