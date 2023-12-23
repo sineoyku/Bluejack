@@ -218,8 +218,8 @@ public class GameDemo{
    
 
   //starting the actual game 
-  int[] playerboard = new int[9]; 
-  int[] cpuboard = new int[9];  
+  int[] playerboard = new int[9]; //playerboard arrays do not show the cards	
+  int[] cpuboard = new int[9];  // they are just place holders that point to the gamedeck
   int drawncard = 0;
   int turn;
   String input = "";
@@ -236,7 +236,7 @@ public class GameDemo{
   int turnpl = 0;
   
   for(int round = 1; round<20; round++){ 
-    System.out.println("\n-ROUND " +round+"-");
+    System.out.println("\n                 -ROUND " +round+"-");
     System.out.println("************************************************\n");
     System.out.print("YOUR HAND: ");
     for(int j = 0; j<4; j++){
@@ -253,6 +253,7 @@ public class GameDemo{
          }
       }
       playerboard[turn]= drawncard;
+      sumpl += x.getCardnum(drawncard);
 
       for(int q = turn; q<(turn+1); q++){
         outpl += x.getCardcolor(playerboard[q]) + " ";
@@ -261,50 +262,62 @@ public class GameDemo{
 
       System.out.print("YOUR BOARD: ");
       System.out.println(outpl.substring(0, outpl.length()-2));
-      turnpl++;     
 
-
-      System.out.print("Use Card: ");
+      System.out.print("                    Use Card: ");
       try{
 	   boolean bool = true;   
 	   while(bool){   
 	   int lol = sc.nextInt();  
            if((lol-1)>=0 && (lol-1)<4){
 	      playerboard[turn+1]= -1*(lol-1); // - means its a card from players hand
+	      if(plhand.getPlColor(lol-1).equals("double")){
+	         sumpl+= x.getCardnum(playerboard[turn]);
+	      }
+	      else if(plhand.getPlColor(lol-1).equals("flip")){
+	         sumpl -= 2*x.getCardnum(playerboard[turn]);
+	      }
+	      else sumpl += plhand.getPlNum(lol-1);
+
 	      outpl+= plhand.getPlColor(lol-1) + " ";
 	      outpl+= plhand.getPlNum(lol-1) + " - ";
               System.out.print("YOUR BOARD: ");
-              System.out.print(outpl.substring(0, outpl.length()-2));  
+              System.out.println(outpl.substring(0, outpl.length()-2));  
 	      bool = false;
            }
            else if(lol==0) bool = false;
-  	   else System.out.println("This card does not exist. Try again."); }}
+  	   else{
+	       System.out.print("                    This card does not exist."); 
+	       System.out.println("\n                    Try again.");
+
+	   }	       	   }}
       catch(Exception e){
-          System.out.println("Invalid input.");
+          System.out.println("                    Invalid input.");
       }
 
-      System.out.print("End or Stand? ");
-      try{ 
+      System.out.print("                    End or Stand? ");
+      try{
 	 boolean bool = true;
          while(bool){	 
          choice = s.nextLine();
 	 int a = choice.compareToIgnoreCase("stand");
 	 int b = choice.compareToIgnoreCase("end");
-	 if(a!=0 && b!=0) System.out.println("Invalid input. Try again");
+	 if(a!=0 && b!=0) System.out.println("                    Invalid input. Try again");
 	 else bool = false;
 	 }}
       catch(Exception e){
-         System.out.print("\nInvalid input");
+         System.out.println("\n                    Invalid input");
       }
       
       int compare = choice.compareToIgnoreCase("stand");
       if(compare==0){
-	  System.out.println("You chose to stand. Wait for the computer to stand!");  
+	  System.out.println("                    You chose to stand.");  
+	  System.out.println("                    Wait for the computer to stand!");
+	   turncpu += turn +1;
 	    loop2=true;
 	     break; // go to loop 2 where only cpu draws cards
 	   }
       else{
-	  System.out.println("Computer's turn!");
+	  System.out.println("                    Computer's turn!");
           drawncard = rd.nextInt(30)+5;
 
 	  for(int q = 0; q<9; q++){ 
@@ -314,6 +327,7 @@ public class GameDemo{
            }
 
           cpuboard[turn] = drawncard;
+          sumcpu += x.getCardnum(cpuboard[turn]); 
 
 	  for(int q = turn; q<(turn+1); q++){
              outcpu += x.getCardcolor(cpuboard[q]) + " ";
@@ -321,58 +335,54 @@ public class GameDemo{
           }
        
           System.out.print("COMPUTER'S BOARD: ");
-          System.out.println(outcpu.substring(0, outcpu.length()-2));
-          
-	  for(int q = turn; q<turn+1; q++){
-             sumcpu += x.getCardnum(cpuboard[q]);  
-	  }
+          System.out.println(outcpu.substring(0, outcpu.length()-2));	  
 
 	  int card = choosecard(cpuboard, turn, x, cpuhand);
 	  if(card>0){
-	      System.out.println("Computer used a card from it's hand.");	  
+	      System.out.println("                    Computer used a card from it's hand.");
 	      cpuboard[turn+1] = -1*card;
+	      if(cpuhand.getPlColor(card).equals("double")){
+	         sumcpu+= x.getCardnum(cpuboard[turn]);
+	      }
+	      else if(cpuhand.getPlColor(card).equals("flip")){
+	         sumcpu -= 2*x.getCardnum(cpuboard[turn]);
+	      }
+	      else sumcpu += cpuhand.getPlNum(card);
+
 	      outcpu+= cpuhand.getPlColor(card) + " ";
 	      outcpu+= cpuhand.getPlNum(card) + " - ";
               System.out.print("COMPUTER'S BOARD: ");
               System.out.println(outcpu.substring(0, outcpu.length()-2));
 
-	      if(cpuhand.getPlColor(card).equals("flip")){
-	        sumcpu -= 2*x.getCardnum(cpuboard[turn]);
-	      }
-	      else if(cpuhand.getPlColor(card).equals("double")){
-	        sumcpu += x.getCardnum(cpuboard[turn]);  
-	      }
-	     else{
-	        sumcpu += cpuhand.getPlNum(-1*cpuboard[turn+1]);
-	     }
+              cpuhand.setPlColor(card, "null");
+	      cpuhand.setPlNum(card, 0);
 	 
 	  }
 	  
 	  
 	  if(sumcpu>15){
-	    System.out.println("Computer chose to stand. Your turn!");
+	    System.out.println("                    Computer chose to stand. Your turn!");
 	     loop3=true;
-	       turncpu++;
+	       turnpl += turn+1;
 	         break; // go to loop 3 where only player draws cards
 	  }
 	  else{
-	     System.out.println("Your turn!");
-	      turncpu++;
-	    }
+	     System.out.println("                    Your turn!");
+	      	    }
 
           }
        
       if(turn==9){ //Round over
 	  if(sumpl>sumcpu){ 
-		  System.out.println("You won this round!");
+		  System.out.println("         You won this round!");
 	          plscore++;
 	  }
 	  else if(sumpl<sumcpu){
-		  System.out.println("Computer won this round!");
+		  System.out.println("         Computer won this round!");
 	          cpuscore++;
 	  }
 	  else{ 
-	        System.out.println("Tie!");
+	        System.out.println("         Tie!");
 	        cpuscore++;
 		plscore++;
 	  }
@@ -390,16 +400,29 @@ public class GameDemo{
            }
 
 	  cpuboard[turncpu] = drawncard;
+	  sumcpu += x.getCardnum(cpuboard[turncpu]);
 
-	  for(int w = turncpu; w<9; w++){
-             int k = cpuboard[w];
-             if(k>0)  sumcpu += x.getCardnum(cpuboard[w]); 
-	     else  sumcpu += -1*x.getCardnum(cpuboard[w]); 
+	  int card = choosecard(cpuboard, turncpu, x, cpuhand);
+      	  if(card>0){
+	      System.out.println("                    Computer used a card from it's hand.");	  
+	      cpuboard[turn+1] = -1*card;
+	      if(cpuhand.getPlColor(card).equals("double")){
+	         sumcpu+= x.getCardnum(cpuboard[turncpu]);
+	      }
+	      else if(cpuhand.getPlColor(card).equals("flip")){
+	         sumcpu -= 2*x.getCardnum(cpuboard[turncpu]);
+	      }
+	      else sumpl += plhand.getPlNum(card);
+
+	      outcpu+= cpuhand.getPlColor(card) + " ";
+	      outcpu+= cpuhand.getPlNum(card) + " - ";
+              System.out.print("COMPUTER'S BOARD: ");
+              System.out.println(outcpu.substring(0, outcpu.length()-2));
+	 
 	  }
  
-            //keeping track of the turns
 	  if(turncpu==8){ 
-		  System.out.println("Computer chose to stand!");
+		  System.out.println("                    Computer chose to stand!");
   	          for(int w = turncpu; w<(turncpu+1); w++){
            	     outcpu += x.getCardcolor(w) + " ";
      	    	     outcpu += String.valueOf(x.getCardnum(w)) + "-";
@@ -416,19 +439,19 @@ public class GameDemo{
 	  	  }
 
 		  if(sumpl>sumcpu){ 
-		 	 System.out.println("You won this round!");
+		 	 System.out.println("         You won this round!");
 	         	 plscore++;
 		         turncpu++;	
 			 break;
 		  }
 		  else if(sumpl<sumcpu){
-			  System.out.println("Computer won this round!");
+			  System.out.println("         Computer won this round!");
 	        	  cpuscore++;
 			  turncpu++;	
 			  break;
 		  }
 		  else{ 
-	      		System.out.println("Tie!");
+	      		System.out.println("         Tie!");
 	     	        cpuscore++;
 	               	plscore++;
 		        turncpu++;	
@@ -438,7 +461,7 @@ public class GameDemo{
 
           else{
 	  if(sumcpu>15){
-		  System.out.println("Computer chose to stand!");
+		  System.out.println("                    Computer chose to stand!");
   	          for(int w = turncpu; w<(turncpu+1); w++){
            	     outcpu += x.getCardcolor(w) + " ";
      	    	     outcpu += String.valueOf(x.getCardnum(w)) + "-";
@@ -448,26 +471,21 @@ public class GameDemo{
       		  System.out.print("YOUR BOARD: ");
        		  System.out.println(outpl.substring(0, outpl.length()-1));
 
-		  for(int w = 0; w<9; w++){
-	            int k = playerboard[w];
-                    if(k>0) sumpl += x.getCardnum(playerboard[w]); 
-		    else sumpl += -1*x.getCardnum(playerboard[w]);  
-	  	  }
-
+	
 		  if(sumpl>sumcpu){ 
-		 	 System.out.println("You won this round!");
+		 	 System.out.println("         You won this round!");
 	         	 plscore++;
 	                 turncpu++;			 
 			 break;
 		  }
 		  else if(sumpl<sumcpu){
-			  System.out.println("Computer won this round!");
+			  System.out.println("         Computer won this round!");
 	        	  cpuscore++;
 	                  turncpu++;	  
 			  break;
 		  }
 		  else{ 
-	      		System.out.println("Tie!");
+	      		System.out.println("         Tie!");
 	     	        cpuscore++;
 	               	plscore++;
 	                turncpu++;	
@@ -476,8 +494,7 @@ public class GameDemo{
 	 }
 	  }
       }
-      
-      turnpl = turn+1;      
+            
       while(loop3){   
           drawncard = rd.nextInt(30)+5;
 
@@ -488,6 +505,7 @@ public class GameDemo{
            }
 
 	  playerboard[turnpl]=drawncard;
+	  sumpl += x.getCardnum(drawncard);
 
           for(int w = turnpl; w<(turnpl+1); w++){
              outpl += x.getCardcolor(playerboard[w]) + " ";
@@ -498,68 +516,85 @@ public class GameDemo{
           System.out.print("YOUR BOARD: ");
           System.out.println(outpl.substring(0, outpl.length()-1));
 
-          System.out.print("Use Card: ");
-          try{
-	      boolean bool = true;   
-	      while(bool){   
-	      int lol = sc.nextInt();  
-              if((lol-1)>=0 && (lol-1)<4){
-	          playerboard[turnpl+1]= -1*(lol-1); // - means its a card from players hand
-	           outpl+= plhand.getPlColor(lol-1) + " ";
-	            outpl+= plhand.getPlNum(lol-1) + " - ";
-                   System.out.print("YOUR BOARD: ");
-                  System.out.print(outpl.substring(0, outpl.length()-2));  
-	          bool = false;
-              }
-              else if(lol==0) bool = false;
-  	      else System.out.println("This card does not exist. Try again."); }}
-          catch(Exception e){
-              System.out.println("Invalid input.");
-          }
+          System.out.print("                    Use Card: ");
+      try{
+	   boolean bool = true;   
+	   while(bool){   
+	   int lol = sc.nextInt();  
+           if((lol-1)>=0 && (lol-1)<4){
+	      playerboard[turn+1]= -1*(lol-1); // - means its a card from players hand
+	      if(plhand.getPlColor(lol-1).equals("double")){
+	         sumpl+= x.getCardnum(playerboard[turn]);
+	      }
+	      else if(plhand.getPlColor(lol-1).equals("flip")){
+	         sumpl -= 2*x.getCardnum(playerboard[turn]);
+	      }
+	      else sumpl += plhand.getPlNum(lol-1);
+
+	      outpl+= plhand.getPlColor(lol-1) + " ";
+	      outpl+= plhand.getPlNum(lol-1) + " - ";
+              System.out.print("YOUR BOARD: ");
+              System.out.print(outpl.substring(0, outpl.length()-2));  
+	      bool = false;
+           }
+           else if(lol==0) bool = false;
+  	   else{
+	        System.out.println("                    This card does not exist.");
+	        System.out.println("                    Try again.");
+	   }
+	  
+	   }}
+      catch(Exception e){
+          System.out.println("                    Invalid input.");
+      }
        
-	  System.out.println("Draw or Stand?");
-          choice = s.nextLine();
-
-	  if(choice.equals("Stand")){
-		  System.out.println("You chose to stand!");
-       		  System.out.print("Computer's Board: ");
-      		  System.out.println(outcpu.substring(0, outcpu.length()-1));
-      		  System.out.print("Your Board: ");
-       		  System.out.println(outpl.substring(0, outpl.length()-1));
-
-		  for(int w = 0; w<9; w++){
-         	    sumpl += x.getCardnum(playerboard[w]);  
-	  	  }
-
-		  for(int w = turnpl; w<9; w++){
-         	    sumcpu += x.getCardnum(cpuboard[w]);  
-	  	  }
-
+	  System.out.println("                    Draw or Stand?");
+          
+      try{
+	 boolean bool = true;
+         while(bool){	 
+         choice = s.nextLine();
+	 int a = choice.compareToIgnoreCase("stand");
+	 int b = choice.compareToIgnoreCase("end");
+	 if(a!=0 && b!=0) System.out.println("                    Invalid input. Try again");
+	 else bool = false;
+	 }}
+      catch(Exception e){
+         System.out.println("\n                    Invalid input");
+      }
+      
+      int compare = choice.compareToIgnoreCase("stand");
+      if(compare==0){
+                  System.out.println("                    You chose to stand. Round over");
 		  if(sumpl>sumcpu){ 
-		 	 System.out.println("You won this round!");
+		 	 System.out.println("         You won this round!");
 	         	 plscore++;
 			 turnpl++;
 			 break;
 		  }
 		  else if(sumpl<sumcpu){
-			  System.out.println("Computer won this round!");
+			  System.out.println("         Computer won this round!");
 	        	  cpuscore++;
 			  turnpl++;
 			  break;
 		  }
 		  else{ 
-	      		System.out.println("Tie!");
+	      		System.out.println("         Tie!");
 	     	        cpuscore++;
 	               	plscore++;
 			turnpl++;
 			break;
          	  }
 
-	  }
-        else turnpl++;	  
+ 
          }
+     	 
+        else turnpl++;	
+      }
+  System.out.println("\n************************************************"); 
+  System.out.print("\nYour score: " + plscore);
+  System.out.println("       Cpu score: " + cpuscore);
 
-  System.out.println("************************************************\n"); 
   }
 
     
