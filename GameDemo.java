@@ -141,7 +141,6 @@ public class GameDemo{
     Scanner sc = new Scanner(System.in);
     Scanner s = new Scanner(System.in);
     GameDeck x = new GameDeck();
-    Shuffle(x, 50);
 
     /* test gamedeck
     System.out.println("Game Deck: ");	
@@ -152,7 +151,6 @@ public class GameDemo{
     
    PlayerDeck player = new PlayerDeck(10);
    PlayerDeck computer = new PlayerDeck(10);
-   Deal(player, computer, x);
 /*
     test player decks
    System.out.println("PLAYER HAND");
@@ -168,38 +166,7 @@ public class GameDemo{
    PlayerDeck plhand = new PlayerDeck(4);
    PlayerDeck cpuhand = new PlayerDeck(4);
 
-  
-   int i = 0;
-   int num;
-   while(i<4){
-      num = rd.nextInt(10);
-      for(int q = 0; q<4; q++){ 
-       if(player.getPlNum(num) == plhand.getPlNum(q) || 
-		       player.getPlColor(num) == plhand.getPlColor(q)){
-             num = rd.nextInt(10); 
-         } }
-      
-      plhand.setPlNum(i, player.getPlNum(num));
-      plhand.setPlColor(i, player.getPlColor(num));
-      i++;
-      if(i==4) break;
 
-   }
-   i=0;
-    while(i<4){
-      num = rd.nextInt(10);
-      for(int q = 0; q<4; q++){ 
-    if(computer.getPlNum(num) == cpuhand.getPlNum(q) || 
-		    computer.getPlColor(num) == cpuhand.getPlColor(q)){
-             num = rd.nextInt(10); 
-         }
-      
-      cpuhand.setPlNum(i, computer.getPlNum(num));
-      cpuhand.setPlColor(i, computer.getPlColor(num));
-      i++;
-      if(i==4) break;
-   }}
- 
     /*testing the player hands
    System.out.print("YOUR HAND: ");
    for(int j = 0; j<4; j++){
@@ -236,6 +203,40 @@ public class GameDemo{
   int turnpl = 0;
   
   for(int round = 1; round<20; round++){ 
+   Shuffle(x, 50);
+   Deal(player, computer, x);
+
+   int i = 0;
+   int num;
+   while(i<4){
+      num = rd.nextInt(10);
+      for(int q = 0; q<4; q++){ 
+       if(player.getPlNum(num) == plhand.getPlNum(q) || 
+		       player.getPlColor(num) == plhand.getPlColor(q)){
+             num = rd.nextInt(10); 
+         } }
+      
+      plhand.setPlNum(i, player.getPlNum(num));
+      plhand.setPlColor(i, player.getPlColor(num));
+      i++;
+      if(i==4) break;
+
+   }
+   i=0;
+    while(i<4){
+      num = rd.nextInt(10);
+      for(int q = 0; q<4; q++){ 
+    if(computer.getPlNum(num) == cpuhand.getPlNum(q) || 
+		    computer.getPlColor(num) == cpuhand.getPlColor(q)){
+             num = rd.nextInt(10); 
+         }
+      
+      cpuhand.setPlNum(i, computer.getPlNum(num));
+      cpuhand.setPlColor(i, computer.getPlColor(num));
+      i++;
+      if(i==4) break;
+   }}
+	  
     System.out.println("\n                 -ROUND " +round+"-");
     System.out.println("************************************************\n");
     System.out.print("YOUR HAND: ");
@@ -596,8 +597,8 @@ public class GameDemo{
   System.out.print("\nYour score: " + plscore);
   System.out.println("       Cpu score: " + cpuscore);
   
-  outpl += "\n             ";
-  outcpu += "\n             ";
+  outpl = "";
+  outcpu = "";
   }
 
     
