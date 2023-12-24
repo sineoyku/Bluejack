@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class GameDemo{
 public static void writetofile(String name, int plscore,int cpuscore,String date){
-           Scanner reader = null;
+        Scanner reader = null;
         Formatter formatter = null;
         FileWriter fileWriter = null;
 
@@ -21,13 +21,15 @@ public static void writetofile(String name, int plscore,int cpuscore,String date
                 lineCount++;
             }
 
+            String newGame = "-----" + name + ": " + plscore + ", Computer: " + cpuscore + ", Date: " + date ;
+            	    
             if (lineCount == 10) {
                 // Shift elements to remove the oldest game
-                System.arraycopy(history, 1, history, 0, 9);
-            }
+                System.arraycopy(history, 0, history, 0, 9);
+		history[9] = newGame;
 
-            String newGame = "Game " + (lineCount) + "-----" + name + ": " + plscore + ", Computer: " + cpuscore + ", Date: " + date ;
-            history[lineCount % 10] = newGame;
+            }
+	    
 
             // Write the updated history back to the file
             fileWriter = new FileWriter("Scores.txt");
