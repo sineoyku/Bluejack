@@ -9,17 +9,25 @@ public class GameDemo{
 public static void writetofile(String name, int plscore,int cpuscore,String date){
          Scanner reader = null;
          String x = "";
-	 int linenum = 0;
-        try{
-                int i=0;
-                reader = new Scanner(Paths.get("Scores.txt"));
-                while(reader.hasNextLine()){
-			x += reader.nextLine();
-                        x += "\n";
-			linenum++;
+       	String[] history = new String[10];
+	int linecount = 0;
 
+
+
+        try{ 
+		reader = new Scanner(Paths.get("Scores.txt"));
+	        while(reader.hasNextLine() && linecount < 10){
+			history[linecount] = reader.nextLine(); 
+	                linecount++;		
                 }
-	
+
+		if(linecount == 10){
+		   System.arraycopy(history, 1, history, 0, 9);
+		}
+
+		String newgame ="Game " + (linecount) + "-----"+ name + ": " +plscore+ ", Computer: " +cpuscore+ ", Date: " +date+ "\n";
+		history[linecount%10] = newgame;
+		
         }
         catch(IOException e){
                 System.err.println("error");
@@ -33,10 +41,12 @@ public static void writetofile(String name, int plscore,int cpuscore,String date
         FileWriter fw = null;
 
         try{
-          String replaceString=("Game " + linenum + "-----"+ name + ": " +plscore+ ", Computer: " +cpuscore+ ", Date: " +date+ "\n");         
-            fw = new FileWriter("Scores.txt", true);
+                fw = new FileWriter("Scores.txt", true);
                 f = new Formatter(fw);
-                f.format("%s", replaceString);
+		for(int i = linecount; i<history.length; i++){
+	           if(history[i]!=null){		
+                    f.format("%s", history[i]); }}
+
                 fw.close();
                }
         catch(Exception e){
