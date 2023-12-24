@@ -305,10 +305,10 @@ public static void writetofile(int plscore,int cpuscore,String date){
 	   while(bool){   
 	   int lol = sc.nextInt();  
            if((lol-1)>=0 && (lol-1)<4){
-	     	 if(plhand.getPlColor(lol-1).equals("double")){
+	     	 if(plhand.getPlColor(lol-1).equals("double card")){
 	             sumpl+= x.getCardnum(playerboard[turn]);
 	         }
-	         else if(plhand.getPlColor(lol-1).equals("flip")){
+	         else if(plhand.getPlColor(lol-1).equals("flip card")){
 	             sumpl -= 2*x.getCardnum(playerboard[turn]);
 	          }
 	   else sumpl += plhand.getPlNum(lol-1);
@@ -592,10 +592,10 @@ public static void writetofile(int plscore,int cpuscore,String date){
 	   int lol = sc.nextInt();  
            if((lol-1)>=0 && (lol-1)<4){
 	      playerboard[turn+1]= -1*(lol-1); // - means its a card from players hand
-	      if(plhand.getPlColor(lol-1).equals("double")){
+	      if(plhand.getPlColor(lol-1).equals("double card")){
 	         sumpl+= x.getCardnum(playerboard[turn]);
 	      }
-	      else if(plhand.getPlColor(lol-1).equals("flip")){
+	      else if(plhand.getPlColor(lol-1).equals("flip card")){
 	         sumpl -= 2*x.getCardnum(playerboard[turn]);
 	      }
 	      else sumpl += plhand.getPlNum(lol-1);
