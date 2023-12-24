@@ -7,55 +7,56 @@ import java.io.IOException;
 
 public class GameDemo{
 public static void writetofile(String name, int plscore,int cpuscore,String date){
-         Scanner reader = null;
-         String x = "";
-       	String[] history = new String[10];
-	int linecount = 0;
+           Scanner reader = null;
+        Formatter formatter = null;
+        FileWriter fileWriter = null;
 
+        try {
+            reader = new Scanner(Paths.get("Scores.txt"));
+            int lineCount = 0;
+            String[] history = new String[10];
 
+            while (reader.hasNextLine() && lineCount < 10) {
+                history[lineCount] = reader.nextLine();
+                lineCount++;
+            }
 
-        try{ 
-		reader = new Scanner(Paths.get("Scores.txt"));
-	        while(reader.hasNextLine() && linecount < 10){
-			history[linecount] = reader.nextLine(); 
-	                linecount++;		
+            if (lineCount == 10) {
+                // Shift elements to remove the oldest game
+                System.arraycopy(history, 1, history, 0, 9);
+            }
+
+            String newGame = "Game " + (lineCount) + "-----" + name + ": " + plscore + ", Computer: " + cpuscore + ", Date: " + date ;
+            history[lineCount % 10] = newGame;
+
+            // Write the updated history back to the file
+            fileWriter = new FileWriter("Scores.txt");
+            formatter = new Formatter(fileWriter);
+            for (String game : history) {
+                if (game != null) {
+                    formatter.format("%s", game+"\n");
                 }
+            }
 
-		if(linecount == 10){
-		   System.arraycopy(history, 1, history, 0, 9);
-		}
-
-		String newgame ="Game " + (linecount) + "-----"+ name + ": " +plscore+ ", Computer: " +cpuscore+ ", Date: " +date+ "\n";
-		history[linecount%10] = newgame;
-		
-        }
-        catch(IOException e){
-                System.err.println("error");
-        }
-        finally{
-                if(reader!=null){
-                        reader.close();
+        } 
+      catch (IOException e) {
+            System.err.println("Error reading/writing file.");
+        } finally {
+            if (reader != null) {
+                reader.close();
+            }
+            if (formatter != null) {
+                formatter.close();
+            }
+            if (fileWriter != null) {
+                try {
+                    fileWriter.close();
+                } catch (IOException e) {
+                    System.err.println("Error closing FileWriter.");
                 }
-        }
-        Formatter f = null;
-        FileWriter fw = null;
-
-        try{
-                fw = new FileWriter("Scores.txt", true);
-                f = new Formatter(fw);
-		for(int i = linecount; i<history.length; i++){
-	           if(history[i]!=null){		
-                    f.format("%s", history[i]); }}
-
-                fw.close();
-               }
-        catch(Exception e){
-                System.err.println("error");
-        }
-    finally{
-                if(f!=null) f.close();
-        }
-        }
+            }
+        }	
+}
  public static void Shuffle(GameDeck k, int x){
    Random rd = new Random();
 
