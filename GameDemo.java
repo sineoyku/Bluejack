@@ -6,16 +6,20 @@ import java.nio.file.Paths;
 import java.io.IOException;
 
 public class GameDemo{
-public static void writetofile(int plscore,int cpuscore,String date){
+public static void writetofile(String name, int plscore,int cpuscore,String date){
          Scanner reader = null;
          String x = "";
+	 int linenum = 0;
         try{
                 int i=0;
                 reader = new Scanner(Paths.get("Scores.txt"));
                 while(reader.hasNextLine()){
-                        x += reader.nextLine();
+			x += reader.nextLine();
                         x += "\n";
+			linenum++;
+
                 }
+	
         }
         catch(IOException e){
                 System.err.println("error");
@@ -29,7 +33,7 @@ public static void writetofile(int plscore,int cpuscore,String date){
         FileWriter fw = null;
 
         try{
-          String replaceString=("Player: " +plscore+ " Computer: " +cpuscore+ " " +date+ "\n"); 
+          String replaceString=("Game " + linenum + "-----"+ name + ": " +plscore+ ", Computer: " +cpuscore+ ", Date: " +date+ "\n");         
             fw = new FileWriter("Scores.txt", true);
                 f = new Formatter(fw);
                 f.format("%s", replaceString);
@@ -172,7 +176,7 @@ public static void writetofile(int plscore,int cpuscore,String date){
 
   public static void main(String[] args){
     Random rd = new Random();	
-    Scanner sc = new Scanner(System.in);
+    Scanner reader =null;
     Scanner s = new Scanner(System.in);
     GameDeck x = new GameDeck();
 
@@ -235,6 +239,22 @@ public static void writetofile(int plscore,int cpuscore,String date){
   boolean loop3= false;
   int turncpu = 0;
   int turnpl = 0;
+  String date = "";
+  String name = "";
+
+  try{ 
+	  System.out.println("Enter the date: ");
+          date = s.nextLine();    }
+  catch(Exception e){
+          System.out.println("invalid date");
+  }
+
+  try{
+	  System.out.println("Enter your name: ");
+          name = s.nextLine();    }
+  catch(Exception e){
+          System.out.println("invalid name");
+  }
   
   for(int round = 1; round<20; round++){ 
    Shuffle(x, 50);
@@ -245,8 +265,8 @@ public static void writetofile(int plscore,int cpuscore,String date){
    while(i<4){
       num = rd.nextInt(10);
       for(int q = 0; q<4; q++){ 
-       if(player.getPlNum(num) == plhand.getPlNum(q) || 
-		       player.getPlColor(num) == plhand.getPlColor(q)){
+       boolean bool = player.getPlNum(num) == plhand.getPlNum(q) &&  player.getPlColor(num) == plhand.getPlColor(q);
+       if(bool){
              num = rd.nextInt(10); 
          } }
       
@@ -260,8 +280,8 @@ public static void writetofile(int plscore,int cpuscore,String date){
     while(i<4){
       num = rd.nextInt(10);
       for(int q = 0; q<4; q++){ 
-    if(computer.getPlNum(num) == cpuhand.getPlNum(q) || 
-		    computer.getPlColor(num) == cpuhand.getPlColor(q)){
+	boolean bool = computer.getPlNum(num) == cpuhand.getPlNum(q) && computer.getPlColor(num) == cpuhand.getPlColor(q);
+        if(bool){
              num = rd.nextInt(10); 
          }
       
@@ -273,7 +293,7 @@ public static void writetofile(int plscore,int cpuscore,String date){
 	  
     System.out.println("\n                 -ROUND " +round+ "-");
     System.out.println("************************************************\n");
-    System.out.print("YOUR HAND: "); 
+    System.out.print(name.toUpperCase() +" HAND: "); 
     for(int j = 0; j<4; j++){
       System.out.print(plhand.getPlNum(j) +" "+plhand.getPlColor(j)+" ");
     }
@@ -295,15 +315,17 @@ public static void writetofile(int plscore,int cpuscore,String date){
 	outpl += String.valueOf(x.getCardnum(playerboard[q])) + " - ";
       }
 
-      System.out.print("YOUR BOARD: ");
+      System.out.print(name.toUpperCase() + " BOARD: ");
       System.out.println(outpl.substring(0, outpl.length()-2));
-      System.out.println("YOUR SCORE: " +sumpl);
+      System.out.println(name.toUpperCase() + " SCORE: " +sumpl);
 
       System.out.print("                    Use Card: ");
+
       try{
-	   boolean bool = true;   
+	   reader = new Scanner(System.in);  
+	   boolean bool = true; 
 	   while(bool){   
-	   int lol = sc.nextInt();  
+	   int lol = reader.nextInt();  
            if((lol-1)>=0 && (lol-1)<4){
 	     	 if(plhand.getPlColor(lol-1).equals("double card")){
 	             sumpl+= x.getCardnum(playerboard[turn]);
@@ -315,29 +337,37 @@ public static void writetofile(int plscore,int cpuscore,String date){
 
 	      outpl+= plhand.getPlColor(lol-1) + " ";
 	      outpl+= plhand.getPlNum(lol-1) + " - ";
-              System.out.print("YOUR BOARD: ");
+              System.out.print(name.toUpperCase() + " BOARD: ");
               System.out.println(outpl.substring(0, outpl.length()-2)); 
-	      System.out.println("YOUR SCORE: " + sumpl); 
+	      System.out.println(name.toUpperCase() + " SCORE: " + sumpl); 
 	      bool = false;
            }
            else if(lol==0) bool = false;
   	   else{
 	       System.out.print("                    This card does not exist."); 
 	       System.out.println("\n                    Try again.");
+	       System.out.print("                    ");
 
 	   }	       	   }}
       catch(Exception e){
           System.out.println("                    Invalid input.");
+	  
       }
-
+      finally{
+         if(reader!=null) reader = null;;
+      }
+      
       System.out.print("                    End or Stand? ");
       try{
-	 boolean bool = true;
+	 boolean bool = true;     
          while(bool){	 
          choice = s.nextLine();
 	 int a = choice.compareToIgnoreCase("stand");
 	 int b = choice.compareToIgnoreCase("end");
-	 if(a!=0 && b!=0) System.out.println("                    Invalid input. Try again");
+	 if(a!=0 && b!=0){ 
+		 System.out.println("                    Invalid input. Try again");
+	         System.out.print("                    ");
+	 }
 	 else bool = false;
 	 }}
       catch(Exception e){
@@ -423,11 +453,11 @@ public static void writetofile(int plscore,int cpuscore,String date){
                   break; }
 	  }
 
-	  else if(sumpl<20 && sumcpu>20){
+	  else if(sumpl<=20 && sumcpu>20){
 	     System.out.println("         You won this round!");
 	     plscore++;
 	     break;  }
-	  else if(sumpl>20 && sumcpu<20){
+	  else if(sumpl>20 && sumcpu<=20){
 	     System.out.println("         Computer won this round!");
 	     cpuscore++;		  
 	     break; }
@@ -487,12 +517,12 @@ public static void writetofile(int plscore,int cpuscore,String date){
        		  System.out.print("COMPUTER'S BOARD: ");
       		  System.out.println(outcpu.substring(0, outcpu.length()-2));
 		  System.out.println("COMPUTER'S SCORE: " +sumcpu);  
-      		  System.out.print("YOUR BOARD: ");
+      		  System.out.print(name.toUpperCase() + " BOARD: ");
        		  System.out.println(outpl.substring(0, outpl.length()-2));
-		  System.out.println("YOUR SCORE: " +sumpl);  
+		  System.out.println(name.toUpperCase() + " SCORE: " +sumpl);  
 
 
-	 if(sumpl<=20&& sumcpu<=20){ 
+	 if(sumpl<=20 && sumcpu<=20){ 
 	      if(sumpl>sumcpu){
 		  System.out.println("         You won this round!");
 	          plscore++;  
@@ -508,11 +538,11 @@ public static void writetofile(int plscore,int cpuscore,String date){
                   break; }
 	  }
 
-	  else if(sumpl<20 && sumcpu>20){
+	  else if(sumpl<=20 && sumcpu>20){
 	     System.out.println("         You won this round!");
 	     plscore++;
 	     break;  }
-	  else if(sumpl>20 && sumcpu<20){
+	  else if(sumpl>20 && sumcpu<=20){
 	     System.out.println("         Computer won this round!");
 	     cpuscore++;		  
 	     break; }
@@ -528,9 +558,9 @@ public static void writetofile(int plscore,int cpuscore,String date){
        		  System.out.print("COMPUTER'S BOARD: ");
       		  System.out.println(outcpu.substring(0, outcpu.length()-2));
 		  System.out.println("COMPUTER'S SCORE: " +sumcpu);  
-      		  System.out.print("YOUR BOARD: ");
+      		  System.out.print(name.toUpperCase() + " BOARD: ");
        		  System.out.println(outpl.substring(0, outpl.length()-2));
-		  System.out.println("YOUR SCORE: " +sumpl); 
+		  System.out.println(name.toUpperCase() + " SCORE: " +sumpl); 
 	
 	 if(sumpl<=20 && sumcpu<=20){ 
 	      if(sumpl>sumcpu){
@@ -548,11 +578,11 @@ public static void writetofile(int plscore,int cpuscore,String date){
                   break; }
 	  }
 
-	  else if(sumpl<20 && sumcpu>20){
+	  else if(sumpl<=20 && sumcpu>20){
 	     System.out.println("         You won this round!");
 	     plscore++;
 	     break;  }
-	  else if(sumpl>20 && sumcpu<20){
+	  else if(sumpl>20 && sumcpu<=20){
 	     System.out.println("         Computer won this round!");
 	     cpuscore++;		  
 	     break; }
@@ -581,15 +611,16 @@ public static void writetofile(int plscore,int cpuscore,String date){
           }
 
           
-          System.out.print("YOUR BOARD: ");
+          System.out.print(name.toUpperCase() + " BOARD: ");
           System.out.println(outpl.substring(0, outpl.length()-1));
-	  System.out.println("YOUR SCORE: " +sumpl); 
+	  System.out.println(name.toUpperCase() + " SCORE: " +sumpl); 
 
           System.out.print("                    Use Card: ");
-      try{
+      try{ 
+	   reader = new Scanner(System.in);   
 	   boolean bool = true;   
 	   while(bool){   
-	   int lol = sc.nextInt();  
+	   int lol = reader.nextInt();  
            if((lol-1)>=0 && (lol-1)<4){
 	      playerboard[turn+1]= -1*(lol-1); // - means its a card from players hand
 	      if(plhand.getPlColor(lol-1).equals("double card")){
@@ -602,31 +633,39 @@ public static void writetofile(int plscore,int cpuscore,String date){
 
 	      outpl+= plhand.getPlColor(lol-1) + " ";
 	      outpl+= plhand.getPlNum(lol-1) + " - ";
-              System.out.print("YOUR BOARD: ");
-              System.out.print(outpl.substring(0, outpl.length()-2));  
-	      System.out.println("YOUR SCORE: " +sumpl); 
+              System.out.print(name.toUpperCase() + " BOARD: ");
+              System.out.println(outpl.substring(0, outpl.length()-2));  
+	      System.out.println(name.toUpperCase() + " SCORE: " +sumpl); 
 	      bool = false;
            }
            else if(lol==0) bool = false;
   	   else{
 	        System.out.println("                    This card does not exist.");
 	        System.out.println("                    Try again.");
+		System.out.print("                    ");
 	   }
 	  
 	   }}
       catch(Exception e){
           System.out.println("                    Invalid input.");
       }
+      finally{
+          if(reader!=null) reader = null;
+      }
        
 	  System.out.println("                    Draw or Stand?");
-          
+          System.out.print("                    ");
+
       try{
 	 boolean bool = true;
          while(bool){	 
          choice = s.nextLine();
 	 int a = choice.compareToIgnoreCase("stand");
-	 int b = choice.compareToIgnoreCase("end");
-	 if(a!=0 && b!=0) System.out.println("                    Invalid input. Try again");
+	 int b = choice.compareToIgnoreCase("draw");
+	 if(a!=0 && b!=0){
+		 System.out.println("                    Invalid input. Try again");
+	         System.out.print("                    ");
+         }
 	 else bool = false;
 	 }}
       catch(Exception e){
@@ -652,11 +691,11 @@ public static void writetofile(int plscore,int cpuscore,String date){
                   break; }
 	  }
 
-	  else if(sumpl<20 && sumcpu>20){
+	  else if(sumpl<=20 && sumcpu>20){
 	     System.out.println("         You won this round!");
 	     plscore++;
 	     break;  }
-	  else if(sumpl>20 && sumcpu<20){
+	  else if(sumpl>20 && sumcpu<=20){
 	     System.out.println("         Computer won this round!");
 	     cpuscore++;		  
 	     break; }
@@ -670,10 +709,8 @@ public static void writetofile(int plscore,int cpuscore,String date){
         else turnpl++;	
       }
   System.out.println("\n************************************************"); 
-  System.out.print("\nYour score: " + plscore);
+  System.out.print("\n" +name+ " score: " + plscore);
   System.out.println("       Cpu score: " + cpuscore);
-
-  writetofile(plscore, cpuscore, "24.12.2023");
 
   if(plscore==3){ 
 	  System.out.println("            You won!");
@@ -695,6 +732,8 @@ public static void writetofile(int plscore,int cpuscore,String date){
   loop2 = false;
 
   }
+
+  writetofile(name, plscore, cpuscore, date);
 
     
   }
