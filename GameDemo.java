@@ -1,8 +1,47 @@
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Formatter;
+import java.io.FileWriter;
+import java.nio.file.Paths;
+import java.io.IOException;
 
 public class GameDemo{
+public static void writetofile(int plscore,int cpuscore,String date){
+         Scanner reader = null;
+         String x = "";
+        try{
+                int i=0;
+                reader = new Scanner(Paths.get("Scores.txt"));
+                while(reader.hasNextLine()){
+                        x += reader.nextLine();
+                        x += "\n";
+                }
+        }
+        catch(IOException e){
+                System.err.println("error");
+        }
+        finally{
+                if(reader!=null){
+                        reader.close();
+                }
+        }
+        Formatter f = null;
+        FileWriter fw = null;
 
+        try{
+          String replaceString=("Player: " +plscore+ " Computer: " +cpuscore+ " " +date+ "\n"); 
+            fw = new FileWriter("Scores.txt", true);
+                f = new Formatter(fw);
+                f.format("%s", replaceString);
+                fw.close();
+               }
+        catch(Exception e){
+                System.err.println("error");
+        }
+    finally{
+                if(f!=null) f.close();
+        }
+        }
  public static void Shuffle(GameDeck k, int x){
    Random rd = new Random();
 
@@ -484,7 +523,7 @@ public class GameDemo{
 	  }
 
           else{
-	  if(sumcpu>15 && sumcpu<21){
+	  if(sumcpu>15){
 		  System.out.println("                    Computer chose to stand!");
        		  System.out.print("COMPUTER'S BOARD: ");
       		  System.out.println(outcpu.substring(0, outcpu.length()-2));
@@ -634,6 +673,8 @@ public class GameDemo{
   System.out.print("\nYour score: " + plscore);
   System.out.println("       Cpu score: " + cpuscore);
 
+  writetofile(plscore, cpuscore, "24.12.2023");
+
   if(plscore==3){ 
 	  System.out.println("            You won!");
           break;
@@ -652,6 +693,7 @@ public class GameDemo{
   sumpl = 0;
   loop3 = false;
   loop2 = false;
+
   }
 
     
